@@ -1,0 +1,1070 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Pharmacy"
+  },
+  "tags": [
+    {
+      "name": "medicine",
+      "description": "Everything about pharmaceutical medicine"
+    },
+    {
+      "name": "pharmacy",
+      "description": "Everything about the pharmacy"
+    },
+    {
+      "name": "user",
+      "description": "User operations"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://petstore.swagger.io/v2"
+    }
+  ],
+  "paths": {
+    "/medicine": {
+      "post": {
+        "tags": [
+          "medicine"
+        ],
+        "summary": "add a medicine to the base",
+        "description": "pharmacist only",
+        "operationId": "addNewMedicine",
+        "security": [
+          {
+            "provizor_api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "medicine added"
+          },
+          "400": {
+            "description": "invalid input"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Medicine"
+        }
+      },
+      "put": {
+        "tags": [
+          "medicine"
+        ],
+        "summary": "update medicine information",
+        "description": "pharmacist only",
+        "operationId": "updateMedicine",
+        "security": [
+          {
+            "provizor_api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "invalid id"
+          },
+          "404": {
+            "description": "invalid medicine"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Medicine"
+        }
+      },
+      "get": {
+        "tags": [
+          "medicine"
+        ],
+        "summary": "demanded medicine list",
+        "description": "pharmacist only",
+        "operationId": "getMedicinesDemandTrue",
+        "security": [
+          {
+            "provizor_api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "demand",
+            "in": "query",
+            "description": "is in demand",
+            "required": true,
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "acquired list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medicine"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medicine"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid input"
+          }
+        }
+      }
+    },
+    "/medicine/{id_medicine}": {
+      "delete": {
+        "tags": [
+          "medicine"
+        ],
+        "summary": "delete medicine from database by index",
+        "description": "pharmacist only",
+        "operationId": "deleteIdMedicine",
+        "security": [
+          {
+            "provizor_api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id_medicine",
+            "in": "path",
+            "description": "medicine Id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "medicine deleted"
+          },
+          "400": {
+            "description": "invalid input"
+          },
+          "404": {
+            "description": "No medicine in database"
+          }
+        }
+      }
+    },
+    "/pharmacy": {
+      "get": {
+        "tags": [
+          "pharmacy"
+        ],
+        "summary": "Info about all medicine",
+        "operationId": "getAllMedicines",
+        "responses": {
+          "200": {
+            "description": "info acquired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medicine"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medicine"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No medicine found"
+          }
+        }
+      }
+    },
+    "/pharmacy/getMedicines": {
+      "get": {
+        "tags": [
+          "pharmacy"
+        ],
+        "summary": "acquiring all medicine, of a category",
+        "operationId": "getMedicineByFilters",
+        "parameters": [
+          {
+            "name": "name_medicine",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          },
+          {
+            "name": "manufacturer",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "in_stock",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "boolean"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Info acquired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medicine"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medicine"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No medicine found"
+          }
+        }
+      }
+    },
+    "/pharmacy/{id_category}": {
+      "get": {
+        "tags": [
+          "pharmacy"
+        ],
+        "summary": "Acquire medicine by category",
+        "operationId": "getMedicineByCategory",
+        "parameters": [
+          {
+            "name": "id_category",
+            "in": "path",
+            "description": "Category name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "info acquired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medicine"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medicine"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "medicine not found"
+          }
+        }
+      }
+    },
+    "/pharmacy/{id_medicine}": {
+      "get": {
+        "tags": [
+          "pharmacy"
+        ],
+        "summary": "review medicine by id",
+        "parameters": [
+          {
+            "name": "id_medicine",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "info acquired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medicine"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medicine"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data"
+          },
+          "404": {
+            "description": "medicine not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "pharmacy"
+        ],
+        "summary": "add a medicine to demand by id",
+        "security": [
+          {
+            "user_auth": [
+              "write:order",
+              "read:order"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id_medicine",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "demand",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "info acquired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medicine"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medicine"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data"
+          },
+          "404": {
+            "description": "medicine not found"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create new User",
+        "description": "user only",
+        "operationId": "createUser",
+        "security": [
+          {
+            "provizor_api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "new user added"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/User"
+        }
+      }
+    },
+    "/user/login": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Signing in",
+        "operationId": "loginUser",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Login",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Password",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "signed in successfully",
+            "headers": {
+              "X-Rate-Limit": {
+                "description": "calls per hour allowed by the user",
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "X-Expires-After": {
+                "description": "date in UTC when token expires",
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid login and/or password"
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "User sign out",
+        "operationId": "logoutUser",
+        "responses": {
+          "200": {
+            "description": "successful sign out"
+          }
+        }
+      }
+    },
+    "/user/{username}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Acquire user info by id",
+        "operationId": "getUserByName",
+        "security": [
+          {
+            "provizor_api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Info acquired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user name"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Update user info",
+        "description": "user only",
+        "operationId": "updateUser",
+        "security": [
+          {
+            "user_auth": [
+              "write:order",
+              "read:order"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "User name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "invalid name"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Delete user",
+        "description": "user only",
+        "operationId": "deleteUser",
+        "security": [
+          {
+            "user_auth": [
+              "write:order",
+              "read:order"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "User's name, to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Name"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/pharmacy/order": {
+      "post": {
+        "tags": [
+          "pharmacy"
+        ],
+        "summary": "Place order",
+        "operationId": "placeOrder",
+        "security": [
+          {
+            "user_auth": [
+              "write:order",
+              "read:order"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Order"
+        }
+      }
+    },
+    "/pharmacy/ordersByUser/{username}": {
+      "get": {
+        "tags": [
+          "pharmacy"
+        ],
+        "summary": "User can review the orders",
+        "description": "user only",
+        "operationId": "getOrdersByUser",
+        "security": [
+          {
+            "user_auth": [
+              "write:order",
+              "read:order"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "description": "Username",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "description": "Order status (not required)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "placed",
+                "approved",
+                "delivered"
+              ]
+            }
+          },
+          {
+            "name": "medicines",
+            "in": "query",
+            "required": false,
+            "description": "Medicine (not required)",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Medicine"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        }
+      }
+    },
+    "/store/order/{orderId}": {
+      "get": {
+        "tags": [
+          "pharmacy"
+        ],
+        "summary": "Reviewing an order",
+        "description": "pharmacist only",
+        "operationId": "getOrderById",
+        "security": [
+          {
+            "provizor_api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Id шуканого замовлення",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1,
+              "maximum": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Недопустимі значення"
+          },
+          "404": {
+            "description": "Замовлення не знайдено"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "pharmacy"
+        ],
+        "summary": "Видалення замовлення провізором",
+        "description": "pharmacist only",
+        "operationId": "deleteOrderById",
+        "security": [
+          {
+            "provizor_api_key": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "ID of the order that needs to be deleted",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id_category": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name_category": {
+            "type": "string"
+          }
+        }
+      },
+      "Medicine": {
+        "type": "object",
+        "properties": {
+          "id_medicine": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name_medicine": {
+            "type": "string"
+          },
+          "id_category": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "in_stock": {
+            "type": "boolean"
+          },
+          "demand": {
+            "type": "boolean"
+          },
+          "in_stock_number": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "demand_number": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "Medicine"
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id_user": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "User"
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "id_medicines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Medicine"
+            }
+          },
+          "id_user": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "shipDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "description": "Order Status",
+            "enum": [
+              "placed",
+              "approved",
+              "delivered"
+            ]
+          },
+          "complete": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "xml": {
+          "name": "Order"
+        }
+      }
+    },
+    "requestBodies": {
+      "Medicine": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Medicine"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/Medicine"
+            }
+          }
+        },
+        "description": "Medicine to be added",
+        "required": true
+      },
+      "User": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        },
+        "description": "User to be added",
+        "required": true
+      },
+      "Order": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Order"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/Order"
+            }
+          }
+        },
+        "description": "Order to be added",
+        "required": true
+      }
+    },
+    "securitySchemes": {
+      "provizor_api_key": {
+        "type": "apiKey",
+        "name": "provizor_api_key",
+        "in": "header"
+      },
+      "user_auth": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+            "scopes": {
+              "write:order": "Order",
+              "read:order": "review order"
+            }
+          }
+        }
+      }
+    }
+  }
+}
